@@ -25,7 +25,23 @@ from paddle import base, get_flags, set_flags, static
 from paddle.base import core
 from paddle.base.framework import _dygraph_guard
 from paddle.base.wrapped_decorator import signature_safe_contextmanager
-from paddle.pir_utils import DygraphOldIrGuard
+
+# Backward-compatible import for different Paddle versions
+try:
+    from paddle.pir_utils import DygraphOldIrGuard  # Newer versions
+except Exception:  # pragma: no cover - fallback for older wheels
+    try:
+        from paddle.pir_utils import (
+            OldIrGuard as DygraphOldIrGuard,  # Older versions
+        )
+    except Exception:
+        from contextlib import contextmanager
+
+        @contextmanager
+        def DygraphOldIrGuard():
+            yield
+
+
 from paddle.utils.environments import (
     BooleanEnvironmentVariable,
     EnvironmentVariableGuard,
