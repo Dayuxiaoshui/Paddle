@@ -161,10 +161,10 @@ def conv2dtranspose_wrapper(
     padding_algorithm="EXPLICIT",
     groups=1,
     dilation=1,
-    data_format="NCDHW",
+    data_format="NCHW",
 ):
     if data_format == "AnyLayout":
-        data_format = "NCDHW"
+        data_format = "NCHW"
     if padding_algorithm is None:
         padding_algorithm = "EXPLICIT"
     return paddle._C_ops.conv2d_transpose(
